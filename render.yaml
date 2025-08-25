@@ -27,6 +27,6 @@ services:
 
 databases:
   - name: portfolio-api-db
-    databaseName: portfolio-api
+    databaseName: portfolio_api
     plan: free
     region: oregon
