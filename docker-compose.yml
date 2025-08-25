@@ -8,7 +8,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: Pass1234
-      POSTGRES_DB: portfolio-api
+      POSTGRES_DB: portfolio_api
       POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
     ports:
       - "5432:5432"
@@ -16,7 +16,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres -d portfolio-api" ]
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d portfolio_api" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -31,7 +31,7 @@ services:
     container_name: portfolio-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=portfolio-api;Username=postgres;Password=Pass1234
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=portfolio_api;Username=postgres;Password=Pass1234
       - RESEND_API_KEY=your_resend_api_key_here
       - EMAIL_FROM_ADDRESS=noreply@yourdomain.com
       - EMAIL_DOMAIN=yourdomain.com
