@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database for Development
+  postgres:
+    image: postgres:16
+    container_name: portfolio-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Pass1234
+      POSTGRES_DB: portfolio-api
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d portfolio-api" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - portfolio-network
+
+  # API Application (optional, for full containerized development)
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: portfolio-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=portfolio-api;Username=postgres;Password=Pass1234
+      - RESEND_API_KEY=your_resend_api_key_here
+      - EMAIL_FROM_ADDRESS=noreply@yourdomain.com
+      - EMAIL_DOMAIN=yourdomain.com
+    ports:
+      - "5000:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - portfolio-network
+    profiles:
+      - full-stack
+
+  # pgAdmin for database management (optional)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: portfolio-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "8080:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    networks:
+      - portfolio-network
+    profiles:
+      - admin
+
+volumes:
+  postgres_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+
+networks:
+  portfolio-network:
+    driver: bridge

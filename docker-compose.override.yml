@@ -1,0 +1,31 @@
+version: '3.8'
+
+# This file contains development-specific overrides
+# It automatically applies when running docker-compose up
+
+services:
+  api:
+    build:
+      target: build # Use build stage for development with hot reload
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - DOTNET_USE_POLLING_FILE_WATCHER=true
+      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=true
+    volumes:
+      - .:/src:ro # Mount source code for development
+      - /src/bin
+      - /src/obj
+    ports:
+      - "5000:8080" # Map to different port in development
+      - "5001:8081" # HTTPS port
+    command: [ "dotnet", "watch", "run", "--no-restore", "--urls", "http://+:8080;https://+:8081" ]
+    networks:
+      - portfolio-network
+
+  postgres:
+    environment:
+      - POSTGRES_LOG_STATEMENT=all # Enable query logging in development
+    volumes:
+      - ./logs/postgres:/var/log/postgresql:rw # Mount log directory
+    ports:
+      - "5432:5432" # Expose port for external connections

@@ -1,25 +1,68 @@
-**/.dockerignore
-**/.env
-**/.git
-**/.gitignore
-**/.project
-**/.settings
-**/.toolstarget
-**/.vs
-**/.vscode
-**/.idea
-**/*.*proj.user
-**/*.dbmdl
-**/*.jfm
-**/azds.yaml
-**/bin
-**/charts
-**/docker-compose*
-**/Dockerfile*
-**/node_modules
-**/npm-debug.log
-**/obj
-**/secrets.dev.yaml
-**/values.dev.yaml
-LICENSE
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Docker
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Documentation
 README.md
+*.md
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build outputs
+**/bin/
+**/obj/
+**/out/
+**/publish/
+
+# Test results
+**/TestResults/
+**/coverage/
+*.coverage
+*.coveragexml
+
+# Logs
+**/logs/
+*.log
+
+# Temporary files
+**/tmp/
+**/temp/
+*.tmp
+
+# NuGet
+**/packages/
+**/.nuget/
+*.nupkg
+
+# Node.js (if any)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+azure-pipelines.yml
