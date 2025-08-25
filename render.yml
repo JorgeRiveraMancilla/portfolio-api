@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: portfolio-api
+    runtime: docker
+    repo: https://github.com/JorgeRiveraMancilla/portfolio-api
+    region: oregon
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ASPNETCORE_URLS
+        value: http://+:8080
+      - key: ConnectionStrings__DefaultConnection
+        fromDatabase:
+          name: portfolio-api-db
+          property: connectionString
+      - key: RESEND_API_KEY
+        sync: false
+      - key: EMAIL_FROM_ADDRESS
+        sync: false
+      - key: EMAIL_DOMAIN
+        sync: false
+      - key: Cors__AllowedOrigins
+        value: "https://yourdomain.com,https://www.yourdomain.com"
+
+databases:
+  - name: portfolio-api-db
+    databaseName: portfolio-api
+    plan: free
+    region: oregon
